@@ -6,7 +6,6 @@ import Personal from "./_components/Personal";
 import Professional from "./_components/Professional";
 import AddForm from "./_components/AddForm";
 
-
 type Todo = {
   id: number;
   description: string;
@@ -20,7 +19,8 @@ export default function TodoPage() {
   const [personalTodos, setPersonalTodos] = useState<Todo[]>([]);
   const [professionalTodos, setProfessionalTodos] = useState<Todo[]>([]);
   const [errorMsg, setError ] = useState<string>('')
-// ✅ Load todos from localStorage on mount, then fetch from API
+
+// Load todos from localStorage on mount, then fetch from API
 useEffect(() => {
   const storedPersonal = localStorage.getItem("personalTodos");
   const storedProfessional = localStorage.getItem("professionalTodos");
@@ -38,7 +38,7 @@ useEffect(() => {
   fetchTodos();
 }, [getTodos]);
 
-  // ✅ Save todos to localStorage when updated
+  // Save todos to localStorage when updated
   useEffect(() => {
     localStorage.setItem("personalTodos", JSON.stringify(personalTodos));
   }, [personalTodos]);
@@ -47,7 +47,7 @@ useEffect(() => {
     localStorage.setItem("professionalTodos", JSON.stringify(professionalTodos));
   }, [professionalTodos]);
 
-  // ✅ Add Task
+  // Add Task
   const addTask = async (description: string) => {
     try {
       const newTask: Todo | null = await addTodo({
@@ -92,14 +92,12 @@ useEffect(() => {
         }
       }
 
-      
-
     } catch (err: any) {
       setError(err.message);
     }
   };
 
-  // ✅ Toggle Task Completion via API and update localStorage
+  //Toggle Task Completion via API and update localStorage
   const toggleComplete = async (id: number) => {
     try {
       const todoToUpdate = (activeTab === "personal" ? personalTodos : professionalTodos).find(
@@ -173,9 +171,9 @@ useEffect(() => {
 
   return (
     <div className="w-full mx-auto ">
-      {/* Tabs Navigation */}
+
       <div className=" bg-white shadow-lg rounded-lg">
-      {/* ✅ Centered & Balanced Tabs */}
+
       <div className="flex border-b-2 border-gray-300 bg-gray-100">
         <button
           className={`relative flex-1 text-center px-6 py-3 text-lg font-semibold transition-all ${
@@ -202,10 +200,9 @@ useEffect(() => {
       </div>
     </div>
         <div className="max-w-2xl  w-full mx-auto p-6">
-            {/* Add Task Form */}
+   
             <AddForm addTask={addTask} />
 
-            {/* Render Personal or Professional List */}
             <div className="mt-4 bg-white rounded-lg ">
                 {activeTab === "personal" ? (
                 <Personal 

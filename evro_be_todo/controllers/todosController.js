@@ -42,7 +42,6 @@ exports.addTodo = async (req, res) => {
 };
 
 // Update task (mark as completed or update description)
-// Update task (mark as completed or update description)
 exports.updateTodo = async (req, res) => {
   try {
     const { id } = req.params;
