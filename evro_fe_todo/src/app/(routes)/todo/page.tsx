@@ -21,23 +21,22 @@ export default function TodoPage() {
   const [professionalTodos, setProfessionalTodos] = useState<Todo[]>([]);
   const [errorMsg, setError ] = useState<string>('')
 // ✅ Load todos from localStorage on mount, then fetch from API
-  useEffect(() => {
-    const storedPersonal = localStorage.getItem("personalTodos");
-    const storedProfessional = localStorage.getItem("professionalTodos");
+useEffect(() => {
+  const storedPersonal = localStorage.getItem("personalTodos");
+  const storedProfessional = localStorage.getItem("professionalTodos");
 
-    if (storedPersonal) setPersonalTodos(JSON.parse(storedPersonal));
-    if (storedProfessional) setProfessionalTodos(JSON.parse(storedProfessional));
+  if (storedPersonal) setPersonalTodos(JSON.parse(storedPersonal));
+  if (storedProfessional) setProfessionalTodos(JSON.parse(storedProfessional));
 
-    const fetchTodos = async () => {
-      const data = await getTodos();
-      console.log(data);
-      if (data) {
-        setPersonalTodos(data.filter((todo) => todo.type === "personal"));
-        setProfessionalTodos(data.filter((todo) => todo.type === "professional"));
-      }
-    };
-    fetchTodos();
-  }, []);
+  const fetchTodos = async () => {
+    const data = await getTodos();
+    if (data) {
+      setPersonalTodos(data.filter((todo) => todo.type === "personal"));
+      setProfessionalTodos(data.filter((todo) => todo.type === "professional"));
+    }
+  };
+  fetchTodos();
+}, [getTodos]);
 
   // ✅ Save todos to localStorage when updated
   useEffect(() => {
@@ -64,6 +63,37 @@ export default function TodoPage() {
           setProfessionalTodos((prev) => [...prev, newTask]);
         }
       }
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An unknown error occurred.');
+      }
+    }
+  };
+
+  const saveEditTask = async (id: number, editText:string) => {
+    try {
+      const updatedTodo: Todo | null = await updateTodo(id, { description: editText });
+
+      if (updatedTodo) {
+        if (activeTab === "personal") {
+          setPersonalTodos((prev) =>
+            prev.map((todo) =>
+              todo.id === id ? { ...todo, description: editText } : todo
+            )
+          );
+        } else {
+          setProfessionalTodos((prev) =>
+            prev.map((todo) =>
+              todo.id === id ? { ...todo, description: editText } : todo
+            )
+          );
+        }
+      }
+
+      
+
     } catch (err: any) {
       setError(err.message);
     }
@@ -77,9 +107,7 @@ export default function TodoPage() {
       );
 
       if (!todoToUpdate) return;
-
       const updatedCompleted = todoToUpdate.completed === 0 ? 1 : 0;
-      console.log('updatedCompleted',updatedCompleted)
       const updatedTodo: Todo | null = await updateTodo(id, {
         completed: updatedCompleted,
       });
@@ -185,6 +213,7 @@ export default function TodoPage() {
                     toggleComplete={toggleComplete} 
                     deleteTask={deleteTask}  
                     clearCompleted={clearCompleted}
+                    saveEditTask={saveEditTask}
                 />
                 
                 ) : (
@@ -193,6 +222,7 @@ export default function TodoPage() {
                     toggleComplete={toggleComplete} 
                     deleteTask={deleteTask} 
                     clearCompleted={clearCompleted}
+                    saveEditTask={saveEditTask}
                 />
                 )}
             </div>

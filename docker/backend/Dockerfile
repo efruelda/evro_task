@@ -5,7 +5,7 @@ FROM node:18
 WORKDIR /app
 
 # Copy package.json and install dependencies
-COPY package.json package-lock.json ./
+COPY ../evro_be_todo/package.json ../evro_be_todo/package-lock.json ./
 RUN npm install
 
 # Copy source files

@@ -9,8 +9,6 @@ import axios, {
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-console.log('start');
-
 const api: AxiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000",
   headers: {

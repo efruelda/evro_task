@@ -42,12 +42,13 @@ exports.addTodo = async (req, res) => {
 };
 
 // Update task (mark as completed or update description)
+// Update task (mark as completed or update description)
 exports.updateTodo = async (req, res) => {
   try {
     const { id } = req.params;
-    const { completed } = req.body;
+    const { completed, description } = req.body;
 
-    const updatedTask = await Task.updateTask(id, completed);
+    const updatedTask = await Task.updateTask(id, completed, description);
     if (!updatedTask) return res.status(404).json({ error: "Task not found" });
 
     res.json({ message: "Task updated successfully", updatedTask });

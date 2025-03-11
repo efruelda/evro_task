@@ -7,13 +7,15 @@ type Props = {
   toggleComplete: (id: number) => void;
   deleteTask: (id: number) => void;
   clearCompleted: () => void;
+  saveEditTask:(id: number,description:string) => void;
 };
 
-export default function Personal({ todos, toggleComplete, deleteTask,clearCompleted }: Props) {
+export default function Personal({ todos, toggleComplete,saveEditTask, deleteTask,clearCompleted }: Props) {
   return <TaskList 
     todos={todos} 
     toggleComplete={toggleComplete} 
     deleteTask={deleteTask} 
     clearCompleted={clearCompleted} 
+    saveEditTask={saveEditTask}
     />;
 }

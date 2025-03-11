@@ -27,12 +27,20 @@ const addTask = async (description,type) => {
 };
 
 // Update a task (optional: update both description and completed status)
-const updateTask = async (id, completed) => {
-  const [result] = await pool.query(
-    "UPDATE tasks SET completed = ? WHERE id = ?",
-    [completed, id]
-  );
-  return result.affectedRows > 0 ? { id, completed } : null;
+const updateTask = async (id, completed, description) => {
+  let query = "UPDATE tasks SET completed = ?";
+  const params = [completed];
+
+  if (description !== undefined && description !== null) {
+    query += ", description = ?";
+    params.push(description);
+  }
+
+  query += " WHERE id = ?";
+  params.push(id);
+
+  const [result] = await pool.query(query, params);
+  return result.affectedRows > 0 ? { id, completed, description } : null;
 };
 
 // Delete a task
