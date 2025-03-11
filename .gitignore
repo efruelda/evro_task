@@ -1,5 +1,6 @@
 # Node.js
 evro_fe_todo/node_modules
+evro_fe_todo/.next
 evro_be_todo/node_modules
 evro_fe_todo/.env
 evro_be_todo/.env
