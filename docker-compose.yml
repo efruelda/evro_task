@@ -1,56 +1,69 @@
 version: "3.8"
 
 services:
-  mysql:
-    image: mysql:latest
-    container_name: mysql_db
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: todo_db
-      MYSQL_USER: todo_user
-      MYSQL_PASSWORD: todopassword
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
-      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+  # mysql:
+  #   image: mysql:latest
+  #   container_name: mysql_db
+  #   restart: always
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: rootpassword
+  #     MYSQL_DATABASE: todo_db
+  #     MYSQL_USER: todo_user
+  #     MYSQL_PASSWORD: todopassword
+  #   ports:
+  #     - "3306:3306"
+  #   volumes:
+  #     - mysql_data:/var/lib/mysql
+  #     - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
 
-  backend:
-    build:
-      context: .                          # The entire project is the build context
-      dockerfile: docker/backend/Dockerfile
-    container_name: express_backend
-    restart: always
-    depends_on:
-      - mysql
-    environment:
-      DB_HOST: mysql
-      DB_USER: todo_user
-      DB_PASSWORD: todopassword
-      DB_NAME: todo_db
-    ports:
-      - "5000:5000"
-    volumes:
-      - ./evro_be_todo:/app              # optional if you want live updates
-    working_dir: /app
-    command: ["node", "server.js"]
+  # backend:
+  #   build:
+  #     context: .                          # The entire project is the build context
+  #     dockerfile: docker/backend/Dockerfile
+  #   container_name: express_backend
+  #   restart: always
+  #   depends_on:
+  #     - mysql
+  #   environment:
+  #     DB_HOST: mysql
+  #     DB_USER: todo_user
+  #     DB_PASSWORD: todopassword
+  #     DB_NAME: todo_db
+  #   ports:
+  #     - "5000:5000"
+  #   volumes:
+  #     - ./evro_be_todo:/app              # optional if you want live updates
+  #   working_dir: /app
+  #   command: ["node", "server.js"]
 
-  frontend:
-    build:
-      context: .                          # The entire project is the build context
-      dockerfile: docker/frontend/Dockerfile
-    container_name: nextjs_frontend
+  # frontend:
+  #   build:
+  #     context: .                          # The entire project is the build context
+  #     dockerfile: docker/frontend/Dockerfile
+  #   container_name: nextjs_frontend
+  #   restart: always
+  #   environment:
+  #     NEXT_PUBLIC_API_URL: http://localhost:5000
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - ./evro_fe_todo:/app
+  #     - /app/node_modules
+  #   working_dir: /app
+  #   command: ["npm", "run", "dev"]
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres_db
     restart: always
     environment:
-      NEXT_PUBLIC_API_URL: http://localhost:5000
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydatabase
     ports:
-      - "3000:3000"
+      - "5432:5432"
     volumes:
-      - ./evro_fe_todo:/app
-      - /app/node_modules
-    working_dir: /app
-    command: ["npm", "run", "dev"]
+      - postgres_data:/var/lib/postgresql/data
 
 volumes:
-  mysql_data:
+  postgres_data:

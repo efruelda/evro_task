@@ -4,6 +4,10 @@ evro_fe_todo/.next
 evro_be_todo/node_modules
 evro_fe_todo/.env
 evro_be_todo/.env
+express/node_modules
+express/.env
+cms/.env
+cms/node_modules
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
